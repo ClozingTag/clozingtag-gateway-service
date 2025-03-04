@@ -44,11 +44,11 @@ spring:
           enabled: true
 #    config:
 #      uri: ${CONFIG_SERVER:http://localhost:8888}
-#      username: ${CONFIG_USER:peerfunding_user}
-#      password: ${CONFIG_PASS:peerfunding_pass}
+#      username: ${CONFIG_USER:clozingtag_user}
+#      password: ${CONFIG_PASS:clozingtag_pass}
 #      discovery:
 #        enabled: true
-#        service-id: peerfunding-config-service
+#        service-id: clozingtag-config-service
 #      fail-fast: true
 #      retry:
 #        initial-interval: 1000
