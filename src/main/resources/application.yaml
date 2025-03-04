@@ -1,0 +1,118 @@
+server:
+  port: 8181
+  error:
+    whitelabel:
+      enabled: false
+
+gateway:
+  msg: "Welcome to ClozingTag Gateway Default Application"
+  build-version: 1
+  oauth:
+    clientId: ${CLIENT_ID:closing.tag}
+    clientSecret: ${CLIENT_SECRET:closing.tag@25}
+
+
+spring:
+  application:
+    name: clozing-gateway-service
+  profiles:
+    active: default
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+        - TokenRelay=
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+      httpclient:
+        connect-timeout: 50000
+        response-timeout: 120s
+      filter:
+        circuit-breaker:
+          enabled: true
+#    config:
+#      uri: ${CONFIG_SERVER:http://localhost:8888}
+#      username: ${CONFIG_USER:peerfunding_user}
+#      password: ${CONFIG_PASS:peerfunding_pass}
+#      discovery:
+#        enabled: true
+#        service-id: peerfunding-config-service
+#      fail-fast: true
+#      retry:
+#        initial-interval: 1000
+#        multiplier: 1.5
+#        max-attempts: 10000
+#        max-interval: 1500
+#      enabled: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    gateway:
+      enabled: true
+  endpoint:
+    gateway:
+      access: read_only
+  info:
+    env:
+      enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: ClozingTag Gateway Service
+      - url: /v1/auth/v3/api-docs
+        name: ClozingTag Auth Service
+      - url: /v1/device/v3/api-docs
+        name: ClozingTag Device Service
+      - url: /v1/core/v3/api-docs
+        name: ClozingTag Nofitication Service
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    app.clozingtag.clozingtag.gateway.service: DEBUG
+
+info:
+  app:
+    name: Gateway MicroService
+    description: ClozingTag Gateway Application
+    version: 1.0.0
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+#    hostname: localhost
+    hostname: clozingtag-gateway-service
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
