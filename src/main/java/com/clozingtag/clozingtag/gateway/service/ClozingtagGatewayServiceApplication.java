@@ -73,7 +73,7 @@ public class ClozingtagGatewayServiceApplication {
 						//										.setRateLimiter(redisRateLimiter())
 						//										.setKeyResolver(ipKeyResolver())
 						//								)
-						.uri("lb://peerfunding-notification-service"))
+						.uri("lb://clozingtag-notification-service"))
 				.build();
 	}
 
