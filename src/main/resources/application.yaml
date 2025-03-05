@@ -14,7 +14,7 @@ gateway:
 
 spring:
   application:
-    name: clozing-gateway-service
+    name: clozingtag-gateway-service
   profiles:
     active: default
   main:
@@ -89,8 +89,8 @@ springdoc:
         name: ClozingTag Auth Service
       - url: /api/device/v3/api-docs
         name: ClozingTag Device Service
-      - url: /api/core/v3/api-docs
-        name: ClozingTag Nofitication Service
+      - url: /api/notification/v3/api-docs
+        name: ClozingTag Notification Service
 
 logging:
   pattern:
