@@ -32,28 +32,28 @@ public class ClozingtagGatewayServiceApplication {
 	public RouteLocator appRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route("login", p -> p.order(-1)
-						.path("/v1/auth/oauth2/token")
+						.path("/api/auth/oauth2/token")
 						.filters(f -> f.stripPrefix(2)
 								.addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.addRequestHeader("Authorization", encodedClientCredentials)
 						).uri("lb://clozingtag-auth-service"))
 
 				.route("clozingtag-auth-service", p -> p
-						.path("/v1/auth/**", "/v1/auth/v3/api-docs")
+						.path("/api/auth/**", "/api/auth/v3/api-docs")
 						.filters(f -> f.stripPrefix(2).addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.removeRequestHeader("Cookie"))
 						.uri("lb://clozingtag-auth-service"))
 
 
 				.route("clozingtag-device-service", p -> p
-						.path("/v1/device/**", "/v1/device/v3/api-docs")
+						.path("/api/device/**", "/api/device/v3/api-docs")
 						.filters(f -> f.stripPrefix(2).addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.removeRequestHeader("Cookie"))
 						.uri("lb://clozingtag-device-service"))
 
 
 				.route("clozingtag-notification-service", p -> p
-						.path("/v1/notification/**", "/v1/notification/v3/api-docs")
+						.path("/api/notification/**", "/api/notification/v3/api-docs")
 						.filters(f -> f.stripPrefix(2).addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.removeRequestHeader("Cookie"))
 

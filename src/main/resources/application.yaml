@@ -85,11 +85,11 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: ClozingTag Gateway Service
-      - url: /v1/auth/v3/api-docs
+      - url: /api/auth/v3/api-docs
         name: ClozingTag Auth Service
-      - url: /v1/device/v3/api-docs
+      - url: /api/device/v3/api-docs
         name: ClozingTag Device Service
-      - url: /v1/core/v3/api-docs
+      - url: /api/core/v3/api-docs
         name: ClozingTag Nofitication Service
 
 logging:
