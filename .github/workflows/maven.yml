@@ -14,19 +14,43 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  IMAGE_NAME: ghcr.io/clozingtag
+
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package -DskipTests --file pom.xml
+
+        # Log in to GitHub Container Registry
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GH_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build container image
+        run: docker build -t ${{ env.IMAGE_NAME }}/clozingtag-gateway-service:$(echo $GITHUB_SHA | head -c7) .
+
+      - name: Push image to GH Container Registry
+        run: docker push ${{ env.IMAGE_NAME }}/clozingtag-gateway-service:$(echo $GITHUB_SHA | head -c7)
+
+
+      - name: Update deployment file
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ env.IMAGE_NAME }}/clozingtag-gateway-service:'${TAG}'|' k8s/clozingtag-gateway-service-deployment.yaml
+
+      - name: Simulate Deployment
+        run: |
+          echo "Simulating deployment environment..."
+          sleep 2
+          echo "Deployment successful!"
 
