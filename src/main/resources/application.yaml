@@ -104,9 +104,9 @@ springdoc:
 
 logging:
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+    console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]){yellow} %clr(:){red} %clr(%m){faint}%n"
   level:
-    app.clozingtag.clozingtag.gateway.service: DEBUG
+    com.clozingtag.clozingtag.gateway.service: DEBUG
 
 info:
   app:

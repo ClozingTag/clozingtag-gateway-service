@@ -85,8 +85,6 @@ spec:
             requests:
               cpu: 400m
               memory: 512Mi
-      imagePullSecrets:
-        - name: clozingtag-ghrc-deployment-secrets
 
 ---
 apiVersion: v1
