@@ -38,8 +38,14 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
             allowedHeaders: "*"
-            allowedMethods: "*"
+            max-age: 3600
       httpclient:
         connect-timeout: 50000
         response-timeout: 120s
