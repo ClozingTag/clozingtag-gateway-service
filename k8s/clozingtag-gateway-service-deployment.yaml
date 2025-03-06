@@ -72,7 +72,7 @@ spec:
                 secretKeyRef:
                   name: clozingtag-gateway-service-secret
                   key: client-secret
-          image: <IMAGE>
+          image: ghcr.io/clozingtag/clozingtag-gateway-service:fcf2943
           imagePullPolicy: IfNotPresent
           name: clozingtag-gateway-service
           ports:
