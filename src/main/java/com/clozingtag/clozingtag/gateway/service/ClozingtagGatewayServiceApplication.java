@@ -36,7 +36,7 @@ public class ClozingtagGatewayServiceApplication {
 						.filters(f -> f.stripPrefix(2)
 								.addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.addRequestHeader("Authorization", encodedClientCredentials)
-						).uri("lb://clozingtag-auth-service"))
+						).uri(appConfiguration.getOpenapiServiceUrl().getAuth()))
 
 				.route("clozingtag-auth-service", p -> p
 						.path("/api/auth/**", "/api/auth/v3/api-docs")
