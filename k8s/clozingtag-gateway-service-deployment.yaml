@@ -1,10 +1,20 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clozingtag-gateway-service-configmap
+data:
+  openapi-auth-url: "http://clozingtag-auth-service-svc:8182"
+  openapi-device-url: "http://clozingtag-device-service-svc:8183"
+  openapi-notification-url: "http://clozingtag-notification-service-svc:8184"
+
+---
+apiVersion: v1
 kind: Secret
 metadata:
   name: clozingtag-gateway-service-secret
 data:
-  client-secret: "cGVlci5mdW5kaW5nQDIw" #change me
-  client-id: "cGVlci5mdW5kaW5n" #change me
+  client-secret: "Y2xvc2luZy50YWdAMjU=" # closing.tag@25
+  client-id: "Y2xvc2luZy50YWc=" # closing.tag # echo -n 'closing.tag' | base64
 
 ---
 apiVersion: apps/v1
@@ -22,44 +32,61 @@ spec:
         app: clozingtag-gateway-service-deployment
     spec:
       containers:
-      - env:
-        - name: JAVA_OPTIONS
-          value: -XX:TieredStopAtLevel=1 -noverify -Xms128m -Xmx512m -Xss4m -XX:ParallelGCThreads=1
-            -XX:ConcGCThreads=1 -Djava.util.concurrent.ForkJoinPool.common.parallelism=1
-            -cp .
-        - name: DISCOVERY_SERVER_URL
-          valueFrom:
-            configMapKeyRef:
-              name: clozingtag-discovery-service-configmap
-              key: discovery-server-url
-#        - name: CONFIG_SERVER
-#          valueFrom:
-#            configMapKeyRef:
-#              name: clozingtag-gateway-service-configmap
-#              key: config-server-url
-        - name: CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: clozingtag-gateway-service-secret
-              key: client-id
-        - name:  CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name:  clozingtag-gateway-service-secret
-              key:  client-secret
-        image: <IMAGE>
-        imagePullPolicy: IfNotPresent
-        name: clozingtag-gateway-service
-        ports:
-          - containerPort: 8181
-            protocol: TCP
-        resources:
-          limits:
-            cpu: 800m
-            memory: 1024Mi
-          requests:
-            cpu: 400m
-            memory: 512Mi
+        - env:
+            - name: JAVA_OPTIONS
+              value: -XX:TieredStopAtLevel=1 -noverify -Xms128m -Xmx512m -Xss4m -XX:ParallelGCThreads=1
+                -XX:ConcGCThreads=1 -Djava.util.concurrent.ForkJoinPool.common.parallelism=1
+                -cp .
+            - name: DISCOVERY_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-discovery-service-configmap
+                  key: discovery-server-url
+            - name: OPENAPI_AUTH_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-configmap
+                  key: openapi-auth-url
+            - name: OPENAPI_DEVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-configmap
+                  key: openapi-device-url
+            - name: OPENAPI_NOTIFICATION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-configmap
+                  key: openapi-notification-url
+            #        - name: CONFIG_SERVER
+            #          valueFrom:
+            #            configMapKeyRef:
+            #              name: clozingtag-gateway-service-configmap
+            #              key: config-server-url
+            - name: CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: clozingtag-gateway-service-secret
+                  key: client-id
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: clozingtag-gateway-service-secret
+                  key: client-secret
+          image: <IMAGE>
+          imagePullPolicy: IfNotPresent
+          name: clozingtag-gateway-service
+          ports:
+            - containerPort: 8181
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 800m
+              memory: 1024Mi
+            requests:
+              cpu: 400m
+              memory: 512Mi
+      imagePullSecrets:
+        - name: clozingtag-ghrc-deployment-secrets
 
 ---
 apiVersion: v1
@@ -73,4 +100,4 @@ spec:
     - protocol: "TCP"
       port: 8181
       targetPort: 8181
-  type: ClusterIP
+  type: LoadBalancer # you can use an ingress later

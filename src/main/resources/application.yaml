@@ -7,6 +7,10 @@ server:
 gateway:
   msg: "Welcome to ClozingTag Gateway Default Application"
   build-version: 1
+  openapi-service-url:
+    auth: ${OPENAPI_AUTH_URL:lb://clozingtag-auth-service} #http://clozingtag-auth-service-svc.default.svc:8182
+    device: ${OPENAPI_DEVICE_URL:lb://clozingtag-device-service} #http://clozingtag-device-service-svc.default.svc:8183
+    notification: ${OPENAPI_NOTIFICATION_URL:lb://clozingtag-notification-service} #http://clozingtag-auth-notification-svc:8184
   oauth:
     clientId: ${CLIENT_ID:closing.tag}
     clientSecret: ${CLIENT_SECRET:closing.tag@25}

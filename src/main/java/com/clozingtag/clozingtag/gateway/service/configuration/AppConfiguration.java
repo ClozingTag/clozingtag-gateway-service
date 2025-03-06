@@ -9,6 +9,7 @@ public class AppConfiguration {
     private OauthClient oauth;
     private String msg;
     private String buildVersion;
+    private OpenApiServiceUrl openapiServiceUrl;
 
 
 
@@ -16,5 +17,12 @@ public class AppConfiguration {
     public static class OauthClient {
         private String clientId;
         private String clientSecret;
+    }
+
+    @Data
+    public static class OpenApiServiceUrl {
+        private String auth;
+        private String device;
+        private String notification;
     }
 }

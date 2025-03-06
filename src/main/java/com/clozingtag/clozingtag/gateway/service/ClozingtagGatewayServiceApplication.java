@@ -29,7 +29,7 @@ public class ClozingtagGatewayServiceApplication {
 
 
 	@Bean
-	public RouteLocator appRoutes(RouteLocatorBuilder builder) {
+	public RouteLocator appRoutes(RouteLocatorBuilder builder, AppConfiguration appConfiguration) {
 		return builder.routes()
 				.route("login", p -> p.order(-1)
 						.path("/api/auth/oauth2/token")
@@ -42,14 +42,14 @@ public class ClozingtagGatewayServiceApplication {
 						.path("/api/auth/**", "/api/auth/v3/api-docs")
 						.filters(f -> f.stripPrefix(2).addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.removeRequestHeader("Cookie"))
-						.uri("lb://clozingtag-auth-service"))
+						.uri(appConfiguration.getOpenapiServiceUrl().getAuth()))
 
 
 				.route("clozingtag-device-service", p -> p
 						.path("/api/device/**", "/api/device/v3/api-docs")
 						.filters(f -> f.stripPrefix(2).addRequestHeader("X-PF-Response-Time", new Date().toString())
 								.removeRequestHeader("Cookie"))
-						.uri("lb://clozingtag-device-service"))
+						.uri(appConfiguration.getOpenapiServiceUrl().getDevice()))
 
 
 				.route("clozingtag-notification-service", p -> p
@@ -73,7 +73,7 @@ public class ClozingtagGatewayServiceApplication {
 						//										.setRateLimiter(redisRateLimiter())
 						//										.setKeyResolver(ipKeyResolver())
 						//								)
-						.uri("lb://clozingtag-notification-service"))
+						.uri(appConfiguration.getOpenapiServiceUrl().getNotification()))
 				.build();
 	}
 
