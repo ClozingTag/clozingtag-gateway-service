@@ -82,7 +82,7 @@ spec:
                 configMapKeyRef:
                   name: clozingtag-gateway-service-db-configmap
                   key: redis-port
-          image: <IMAGE>
+          image: ghcr.io/clozingtag/clozingtag-gateway-service:3ff2f64
           imagePullPolicy: IfNotPresent
           name: clozingtag-gateway-service
           ports:
