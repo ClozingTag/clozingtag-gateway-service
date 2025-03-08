@@ -49,9 +49,13 @@ spring:
       httpclient:
         connect-timeout: 50000
         response-timeout: 120s
-#      filter:
-#        circuit-breaker:
-#          enabled: true
+      filter:
+        circuit-breaker:
+          enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
 
 #    config:
 #      uri: ${CONFIG_SERVER:http://localhost:8888}
