@@ -72,7 +72,17 @@ spec:
                 secretKeyRef:
                   name: clozingtag-gateway-service-secret
                   key: client-secret
-          image: ghcr.io/clozingtag/clozingtag-gateway-service:f50a277
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-db-configmap
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-db-configmap
+                  key: redis-port
+          image: <IMAGE>
           imagePullPolicy: IfNotPresent
           name: clozingtag-gateway-service
           ports:

@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clozingtag-gateway-service-db-configmap
+data:
+  redis-host: "clozingtag-gateway-service-db-svc"
+  redis-port: "6379"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: clozingtag-gateway-service-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clozingtag-gateway-service-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clozingtag-gateway-service-db-deployment
+  template:
+    metadata:
+      labels:
+        app: clozingtag-gateway-service-db-deployment
+    spec:
+      containers:
+        - name: clozingtag-gateway-service-db-deployment
+          image: redis:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+          env:
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-db-configmap
+                  key: redis-host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: clozingtag-gateway-service-db-configmap
+                  key: redis-port
+          volumeMounts:
+            - mountPath: /data
+              name: clozingtag-gateway-service-db-storage
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+      volumes:
+        - name: clozingtag-gateway-service-db-storage
+          persistentVolumeClaim:
+            claimName: clozingtag-gateway-service-db-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clozingtag-gateway-service-db-svc
+spec:
+  selector:
+    app: clozingtag-gateway-service-db-deployment
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP  # Internal service

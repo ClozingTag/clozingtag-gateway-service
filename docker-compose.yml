@@ -1,24 +1,25 @@
-#version: "3.7"
-#
-## Services
-#services:
-#
-#  redis:
-#    image: redis:latest
-#    restart: always
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - redis_data:/data
-#
-#  redis_insight:
-#    image: redislabs/redisinsight:latest
-#    restart: always
-#    ports:
-#      - "8009:8009"
-#    volumes:
-#      - redis_insight_data:/db
-#
-#volumes:
-#  redis_data:
-#  redis_insight_data:
+services:
+  redis:
+    image: redislabs/redismod
+    container_name: redis
+    ports:
+      - 6379:6379
+    user: redis
+
+    networks:
+      - redisnet
+  redisinsight:
+    image: redislabs/redisinsight:1.13.0
+    ports:
+      - '8001:8001'
+    volumes:
+      - redisinsight_db:/db
+    networks:
+      - redisnet
+
+volumes:
+  redisinsight_db:
+
+
+networks:
+  redisnet:

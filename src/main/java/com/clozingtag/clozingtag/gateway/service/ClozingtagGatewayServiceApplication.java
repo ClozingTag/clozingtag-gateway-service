@@ -48,20 +48,20 @@ public class ClozingtagGatewayServiceApplication {
                 .route("clozingtag-auth-service", p -> p
                         .path("/api/auth/**", "/api/auth/v3/api-docs")
                         .filters(f -> f.stripPrefix(2)
-//                                .requestRateLimiter(config -> config
-//                                        .setRateLimiter(redisRateLimiter())
-//                                        .setKeyResolver(ipKeyResolver())
-//                                )
-//                                .circuitBreaker(config -> config
-//                                        .setName("authCircuitBreaker")
-//                                        .setFallbackUri("forward:/auth-fallback")
-//                                )
-//                                .retry(retryConfig -> retryConfig
-//                                        .setRetries(3)
-//                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
-//                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
-//                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
-//                                )
+                                .requestRateLimiter(config -> config
+                                        .setRateLimiter(redisRateLimiter())
+                                        .setKeyResolver(ipKeyResolver())
+                                )
+                                .circuitBreaker(config -> config
+                                        .setName("authCircuitBreaker")
+                                        .setFallbackUri("forward:/auth-fallback")
+                                )
+                                .retry(retryConfig -> retryConfig
+                                        .setRetries(3)
+                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
+                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
+                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
+                                )
                                 .addRequestHeader("X-PF-Response-Time", new Date().toString())
                                 .removeRequestHeader("Cookie"))
                         .uri(appConfiguration.getOpenapiServiceUrl().getAuth()))
@@ -70,20 +70,20 @@ public class ClozingtagGatewayServiceApplication {
                 .route("clozingtag-device-service", p -> p
                         .path("/api/device/**", "/api/device/v3/api-docs")
                         .filters(f -> f.stripPrefix(2)
-//                                .requestRateLimiter(config -> config
-//                                        .setRateLimiter(redisRateLimiter())
-//                                        .setKeyResolver(ipKeyResolver())
-//                                )
-//                                .circuitBreaker(config -> config
-//                                        .setName("deviceCircuitBreaker")
-//                                        .setFallbackUri("forward:/device-fallback")
-//                                )
-//                                .retry(retryConfig -> retryConfig
-//                                        .setRetries(3)
-//                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
-//                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
-//                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
-//                                )
+                                .requestRateLimiter(config -> config
+                                        .setRateLimiter(redisRateLimiter())
+                                        .setKeyResolver(ipKeyResolver())
+                                )
+                                .circuitBreaker(config -> config
+                                        .setName("deviceCircuitBreaker")
+                                        .setFallbackUri("forward:/device-fallback")
+                                )
+                                .retry(retryConfig -> retryConfig
+                                        .setRetries(3)
+                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
+                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
+                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
+                                )
                                 .addRequestHeader("X-PF-Response-Time", new Date().toString())
                                 .removeRequestHeader("Cookie"))
                         .uri(appConfiguration.getOpenapiServiceUrl().getDevice()))
@@ -92,37 +92,37 @@ public class ClozingtagGatewayServiceApplication {
                 .route("clozingtag-notification-service", p -> p
                         .path("/api/notification/**", "/api/notification/v3/api-docs")
                         .filters(f -> f.stripPrefix(2)
-//                                .requestRateLimiter(config -> config
-//                                        .setRateLimiter(redisRateLimiter())
-//                                        .setKeyResolver(ipKeyResolver())
-//                                )
-//                                .circuitBreaker(config -> config
-//                                        .setName("notificationCircuitBreaker")
-//                                        .setFallbackUri("forward:/notification-fallback")
-//                                )
-//                                .retry(retryConfig -> retryConfig
-//                                        .setRetries(3)
-//                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
-//                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
-//                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
-//                                )
+                                .requestRateLimiter(config -> config
+                                        .setRateLimiter(redisRateLimiter())
+                                        .setKeyResolver(ipKeyResolver())
+                                )
+                                .circuitBreaker(config -> config
+                                        .setName("notificationCircuitBreaker")
+                                        .setFallbackUri("forward:/notification-fallback")
+                                )
+                                .retry(retryConfig -> retryConfig
+                                        .setRetries(3)
+                                        .setMethods(HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.GET)
+                                        .setStatuses(HttpStatus.REQUEST_TIMEOUT, HttpStatus.SERVICE_UNAVAILABLE)
+                                        .setBackoff(Duration.ofSeconds(2), Duration.ofSeconds(10), 2, false)
+                                )
                                 .addRequestHeader("X-PF-Response-Time", new Date().toString())
                                 .removeRequestHeader("Cookie"))
                         .uri(appConfiguration.getOpenapiServiceUrl().getNotification()))
                 .build();
     }
-//
-//    @Bean
-//    public RedisRateLimiter redisRateLimiter() {
-//        return new RedisRateLimiter(10, 20, 1);
-//    }
-//
-//
-//    @Bean
-//    public KeyResolver ipKeyResolver() {
-//        return exchange ->
-//                Mono.just(Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
-//    }
+
+    @Bean
+    public RedisRateLimiter redisRateLimiter() {
+        return new RedisRateLimiter(10, 20, 1);
+    }
+
+
+    @Bean
+    public KeyResolver ipKeyResolver() {
+        return exchange ->
+                Mono.just(Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
+    }
 
 
 
